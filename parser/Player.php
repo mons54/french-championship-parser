@@ -49,20 +49,37 @@ class Player extends Parser
      */
     protected $poste;
 
+    /**
+     * @var string
+     */
+    protected $photo;
+
+    /**
+     * @var string
+     */
+    protected $link;
+
     public function parse()
     {
         $data = $this->getElementByClass('nom_sportif')->item(0);
 
         if ($data) {
-            $this->setShortName($data->nodeValue);
-            $this->setName($data->nodeValue);
-            $this->setBirthdayDate($this->getValue('identite', 'birthday_date'));
-            $this->setBirthdayPlace($this->getValue('identite', 'birthday_place'));
-            $this->setSize($this->getValue('identite', 'size', -1));
-            $this->setWeight($this->getValue('identite', 'weight', -1));
-            $this->setNationality($this->getValue('identite', 'nationality'));
-            $this->setPoste($this->getValue('identite', 'poste', -1));
-            $this->setId($this->save());
+            $this->setShortName($data->nodeValue)
+                 ->setName($data->nodeValue)
+                 ->setBirthdayDate($this->getValue('identite', 'birthday_date'))
+                 ->setBirthdayPlace($this->getValue('identite', 'birthday_place'))
+                 ->setSize($this->getValue('identite', 'size', -1))
+                 ->setWeight($this->getValue('identite', 'weight', -1))
+                 ->setNationality($this->getValue('identite', 'nationality'))
+                 ->setPoste($this->getValue('identite', 'poste', -1))
+                 ->setPhoto(
+                   $this->getElementByClass('visuel')
+                        ->item(0)
+                        ->getElementsByTagName('img')
+                        ->item(0)
+                        ->getAttribute('src')
+                 )
+                 ->setId($this->save());
         }
 
         return $this;
@@ -294,6 +311,55 @@ class Player extends Parser
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of Photo
+     *
+     * @return string
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    /**
+     * Set the value of Photo
+     *
+     * @param string $photo
+     *
+     * @return self
+     */
+    public function setPhoto($photo)
+    {
+        $this->photo = 'https:' . $photo;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Link
+     *
+     * @return string
+     */
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    /**
+     * Set the value of Link
+     *
+     * @param string $link
+     *
+     * @return self
+     */
+    public function setLink($link)
+    {
+        $this->link = static::BASE_LINK . $link;
 
         return $this;
     }

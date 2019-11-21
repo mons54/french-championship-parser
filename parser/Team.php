@@ -39,10 +39,28 @@ class Team extends Parser
      */
     protected $idStadium;
 
+    /**
+     * @var string
+     */
+    protected $link;
+
+    /**
+     * @var string
+     */
+    protected $logo;
+
     public function parse()
     {
         $data = $this->getElementByClass('nom_sportif')->item(0);
         $this->setShortName($data->nodeValue);
+
+        $this->setLogo(
+          $this->getElementByClass('visuels-club')
+               ->item(0)
+               ->getElementsByTagName('img')
+               ->item(0)
+               ->getAttribute('src')
+        );
 
         $data = $this->getElementByClass('identite')->item(0)->getElementsByTagName('strong');
 
@@ -254,6 +272,55 @@ class Team extends Parser
     public function setIdStadium($idStadium)
     {
         $this->idStadium = $idStadium;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of Link
+     *
+     * @return string
+     */
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    /**
+     * Set the value of Link
+     *
+     * @param string $link
+     *
+     * @return self
+     */
+    public function setLink($link)
+    {
+        $this->link = static::BASE_LINK . $link;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Logo
+     *
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * Set the value of Logo
+     *
+     * @param string $logo
+     *
+     * @return self
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = 'https:' . $logo;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 abstract class Parser
 {
+    const BASE_LINK = 'https://www.lequipe.fr';
     protected $dom;
     protected $db;
 
@@ -10,7 +11,7 @@ abstract class Parser
         $this->db = new PDO('mysql:host=localhost;dbname=football_french_championship', 'root', '', array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
         ));
-        $html = utf8_decode(file_get_contents('https://www.lequipe.fr' . $path));
+        $html = utf8_decode(file_get_contents(static::BASE_LINK . $path));
         $this->dom = new DOMDocument();
         @$this->dom->loadHTML($html);
     }
